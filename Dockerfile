@@ -5,7 +5,6 @@ MAINTAINER tgagor, https://github.com/tgagor
 RUN dnf install -y centos-release-stream && \
     dnf swap -y centos-{linux,stream}-repos && \
     dnf distro-sync -y && \
-    grep -i stream /etc/centos-release && \
     dnf upgrade -y && \
     dnf clean all && \
     rm -rf /tmp/* && \

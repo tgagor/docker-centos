@@ -22,10 +22,7 @@ jobs:
         echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin &&
         docker build --tag ghcr.io/tgagor/centos-stream --cache-from ghcr.io/tgagor/centos-stream . &&
         docker run --name tgagor-centos-stream ghcr.io/tgagor/centos-stream true &&
-        docker export tgagor-centos-stream | docker import - ghcr.io/tgagor/centos-stream:squashed &&
-        docker tag ghcr.io/tgagor/centos-stream:squashed ghcr.io/tgagor/centos-stream:squashed-${GITHUB_REF##*/} &&
+        docker export tgagor-centos-stream | docker import - ghcr.io/tgagor/centos-stream &&
         docker tag ghcr.io/tgagor/centos-stream ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/} &&
         docker push ghcr.io/tgagor/centos-stream &&
-        docker push ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/} &&
-        docker push ghcr.io/tgagor/centos-stream:squashed &&
-        docker push ghcr.io/tgagor/centos-stream:squashed-${GITHUB_REF##*/}
+        docker push ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}

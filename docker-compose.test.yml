@@ -1,0 +1,4 @@
+---
+sut:
+  build: .
+  command: grep -i stream /etc/centos-release
