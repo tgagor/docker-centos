@@ -5,7 +5,7 @@ MAINTAINER tgagor, https://github.com/tgagor
 RUN dnf install -y centos-release-stream && \
     dnf swap -y centos-{linux,stream}-repos && \
     dnf distro-sync -y && \
-    dnf upgrade -y && \
+    dnf --setopt=install_weak_deps=False upgrade-minimal -y && \
     dnf clean all && \
     rm -rf /tmp/* && \
     rm -rf /var/cache/yum && \
