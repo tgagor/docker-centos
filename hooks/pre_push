@@ -1,8 +1,0 @@
-#!/bin/bash
-
-docker run --name tgagor-centos-stream $IMAGE_NAME true
-docker export tgagor-centos-stream | docker import \
-    --change 'CMD ["/bin/bash"]' - $IMAGE_NAME
-docker rm tgagor-centos-stream
-
-# LABEL org.label-schema.schema-version="1.0" org.label-schema.name="CentOS Base Image" org.label-schema.vendor="CentOS" org.label-schema.license="GPLv2" org.label-schema.build-date="20201204"
