@@ -17,12 +17,13 @@ By switching repositories and upgrading all packages we receive pretty big image
 ```
 docker run --name tgagor-centos-stream tgagor/centos-stream true
 docker export tgagor-centos-stream | docker import - tgagor/centos-stream:squashed
+docker rm tgagor-centos-stream
 ```
 
 Result is pretty impressive:
 ```
-REPOSITORY             TAG        IMAGE ID       CREATED              SIZE
-centos                 8          300e315adb2f   2 months ago         209MB
-tgagor/centos-stream   squashed   bf1ce7e28afa   23 seconds ago       346MB
-tgagor/centos-stream   latest     0acaa47455a2   About a minute ago   514MB
+REPOSITORY             TAG        SIZE
+centos                 8          209MB
+tgagor/centos-stream   latest     455MB
+tgagor/centos-stream   squashed   297MB
 ```
