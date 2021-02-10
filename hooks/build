@@ -10,7 +10,7 @@ docker build \
     --label org.opencontainers.image.authors="https://github.com/tgagor" \
     --label org.opencontainers.image.source="https://github.com/tgagor/docker-centos-stream/" \
     --label org.opencontainers.image.url="https://github.com/tgagor/docker-centos-stream/blob/master/README.md" \
-    --label org.opencontainers.image.created="$(date --rfc-3339=date)"
+    --label org.opencontainers.image.created="$(date --rfc-3339=date)" \
     .
 
 docker run --name tgagor-centos-stream $IMAGE_NAME true
