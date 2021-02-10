@@ -27,3 +27,5 @@ centos                 8          209MB
 tgagor/centos-stream   latest     455MB
 tgagor/centos-stream   squashed   297MB
 ```
+
+I used [hooks](https://docs.docker.com/docker-hub/builds/advanced/) to customize build phaze in Docker Hub, thanks to that you will fetch image which is already squashed ;)

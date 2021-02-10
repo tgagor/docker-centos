@@ -3,17 +3,12 @@
 docker build \
     -f $DOCKERFILE_PATH \
     -t $IMAGE_NAME \
-    --label org.opencontainers.image.schema-version="1.0" \
-    --label org.opencontainers.image.title="CentOS Base Image" \
-    --label org.opencontainers.image.vendor="CentOS" \
-    --label org.opencontainers.image.licenses="GPL-2.0" \
-    --label org.opencontainers.image.authors="https://github.com/tgagor" \
-    --label org.opencontainers.image.source="https://github.com/tgagor/docker-centos-stream/" \
-    --label org.opencontainers.image.url="https://github.com/tgagor/docker-centos-stream/blob/master/README.md" \
-    --label org.opencontainers.image.created="$(date --rfc-3339=date)" \
     .
 
+# squash it to make image much smaller
 docker run --name tgagor-centos-stream $IMAGE_NAME true
 docker export tgagor-centos-stream | docker import \
-    --change 'CMD ["/bin/bash"]' - $IMAGE_NAME
+    --change 'CMD ["/bin/bash"]' \
+    --change "LABEL org.opencontainers.image.schema-version=\"1.0\" org.opencontainers.image.title=\"CentOS Base Image\" org.opencontainers.image.vendor=\"CentOS\" org.opencontainers.image.licenses=\"GPL-2.0\" org.opencontainers.image.authors=\"https://github.com/tgagor\" org.opencontainers.image.source=\"https://github.com/tgagor/docker-centos-stream/\" org.opencontainers.image.url=\"https://github.com/tgagor/docker-centos-stream/blob/master/README.md\" org.opencontainers.image.created=\"$(date --rfc-3339=date)\"" \
+    - $IMAGE_NAME
 docker rm tgagor-centos-stream
