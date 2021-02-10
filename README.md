@@ -20,6 +20,11 @@ docker export tgagor-centos-stream | docker import - tgagor/centos-stream:squash
 docker rm tgagor-centos-stream
 ```
 
+This way, instead of having two layers:
+* original `centos:8`
+* and after the switch + all upgrades
+we will have just one layer - final CentOS 8 Stream.
+
 Result is pretty impressive:
 ```
 REPOSITORY             TAG        SIZE
