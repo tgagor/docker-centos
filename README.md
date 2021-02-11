@@ -7,6 +7,4 @@ You can fetch docker image from:
 * [tgagor/centos-stream](https://hub.docker.com/repository/docker/tgagor/centos-stream)
 * ghcr.io/tgagor/centos-stream
 
-
-Source code: https://github.com/tgagor/docker-centos-stream
 More info: https://timor.site/2021/02/centos-8-stream-docker-image/
