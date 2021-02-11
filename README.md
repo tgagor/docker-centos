@@ -1,13 +1,12 @@
-tgagor/centos-stream
-====================
+CentOS 8 Stream Docker image
+============================
 
-We're all divided with Red Hat's decision on changing CentOS into rolling distro. As I'm not sure how to progress with it and there are no Docker base images with Stream variant, I created them based on official instruction: https://www.centos.org/centos-stream/
-
+We're all divided with recent decision on changing CentOS into rolling distro. As there are no official Docker images with Stream variant, I created them on my own, based on [official instruction](https://www.centos.org/centos-stream/). Now at least I can try it and decide on my own if it's stable enough for production workloads.
 
 You can fetch docker image from:
 * [tgagor/centos-stream](https://hub.docker.com/repository/docker/tgagor/centos-stream)
 * ghcr.io/tgagor/centos-stream
-    * ghcr.io/tgagor/centos-stream:squashed
+
 
 Squashing image for smaller size
 --------------------------------
