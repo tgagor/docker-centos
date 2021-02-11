@@ -8,28 +8,5 @@ You can fetch docker image from:
 * ghcr.io/tgagor/centos-stream
 
 
-Squashing image for smaller size
---------------------------------
-
-By switching repositories and upgrading all packages we receive pretty big image - around twice as big as base `centos:8`. It can be squashed by exporting and importing like that:
-
-```
-docker run --name tgagor-centos-stream tgagor/centos-stream true
-docker export tgagor-centos-stream | docker import - tgagor/centos-stream:squashed
-docker rm tgagor-centos-stream
-```
-
-This way, instead of having two layers:
-* original `centos:8`
-* and after the switch + all upgrades
-we will have just one layer - final CentOS 8 Stream.
-
-Result is pretty impressive:
-```
-REPOSITORY             TAG        SIZE
-centos                 8          209MB
-tgagor/centos-stream   latest     455MB
-tgagor/centos-stream   squashed   297MB
-```
-
-I used [hooks](https://docs.docker.com/docker-hub/builds/advanced/) to customize build phaze in Docker Hub, thanks to that you will fetch image which is already squashed ;)
+Source code: https://github.com/tgagor/docker-centos-stream
+More info: https://timor.site/2021/02/centos-8-stream-docker-image/
