@@ -1,3 +1,5 @@
+[![Build docker image](https://github.com/tgagor/docker-centos-stream/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/tgagor/docker-centos-stream/actions/workflows/build.yml)
+
 CentOS 8 Stream Docker image
 ============================
 
