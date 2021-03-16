@@ -9,6 +9,8 @@ on:
   pull_request:
     branches:
       - master
+  schedule:
+    - cron: '*/15 * * * *'
 
 jobs:
   build:
@@ -18,11 +20,25 @@ jobs:
     - name: Set env
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Build the Docker image
-      run: >
-        echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin &&
-        docker build --tag ghcr.io/tgagor/centos-stream --cache-from ghcr.io/tgagor/centos-stream . &&
-        docker run --name tgagor-centos-stream ghcr.io/tgagor/centos-stream true &&
-        docker export tgagor-centos-stream | docker import - ghcr.io/tgagor/centos-stream &&
-        docker tag ghcr.io/tgagor/centos-stream ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/} &&
-        docker push ghcr.io/tgagor/centos-stream &&
+      run: |
+        echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+        docker build --tag ghcr.io/tgagor/centos-stream --cache-from ghcr.io/tgagor/centos-stream .
+        docker run --name tgagor-centos-stream ghcr.io/tgagor/centos-stream true
+        docker export tgagor-centos-stream | docker import - ghcr.io/tgagor/centos-stream
+        docker tag ghcr.io/tgagor/centos-stream ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}
+        docker push ghcr.io/tgagor/centos-stream
         docker push ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}
+    - name: Get current date
+      if: github.event_name == 'schedule'
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: Create a GitHub release
+      if: github.event_name == 'schedule'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+        body: |
+          Weekly rebuild on ${{ steps.date.outputs.date }}
