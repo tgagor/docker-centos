@@ -29,17 +29,28 @@ jobs:
         docker tag ghcr.io/tgagor/centos-stream ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}
         docker push ghcr.io/tgagor/centos-stream
         docker push ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}
-    - name: Get current date
-      id: date
-      if: github.event_name == 'schedule'
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-    - name: Bump version and push tag
+
+    - name: SemVer bump version and push tag
       id: tag_version
       if: github.event_name == 'schedule'
       uses: mathieudutour/github-tag-action@v5.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Create a GitHub release
+
+    - name: Create normal GitHub release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+        body: ${{ steps.tag_version.outputs.changelog }}
+
+    - name: Get current date
+      id: date
+      if: github.event_name == 'schedule'
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: Create a weekly GitHub release
       if: github.event_name == 'schedule'
       uses: actions/create-release@v1
       env:
