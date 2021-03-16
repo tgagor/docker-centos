@@ -33,7 +33,7 @@ jobs:
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}
+        image-ref: 'ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}'
         format: template
         template: '@/contrib/sarif.tpl'
         # don't fail
