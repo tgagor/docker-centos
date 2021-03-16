@@ -10,7 +10,8 @@ on:
     branches:
       - master
   schedule:
-    - cron: '*/15 * * * *'
+    # weekly: at 04:13 on Monday
+    - cron: '13 4 * * 1'
 
 jobs:
   build:
@@ -38,7 +39,6 @@ jobs:
       uses: mathieudutour/github-tag-action@v5.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        tag_prefix: ''
     - name: Create a GitHub release
       if: github.event_name == 'schedule'
       uses: actions/create-release@v1
