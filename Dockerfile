@@ -1,11 +1,8 @@
-FROM centos:8
+FROM quay.io/centos/centos:stream8
 MAINTAINER tgagor, https://github.com/tgagor
 
-# switch to CentOS 8 Stream repos and upgrade packages
-RUN dnf install -y centos-release-stream && \
-    dnf swap -y centos-{linux,stream}-repos && \
-    dnf distro-sync -y && \
-    dnf upgrade-minimal --setopt=install_weak_deps=False -y && \
+# upgrade packages
+RUN dnf upgrade --setopt=install_weak_deps=False -y && \
     dnf clean all && \
     rm -rf /tmp/* && \
     rm -rf /var/cache/yum && \
