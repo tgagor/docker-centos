@@ -28,8 +28,12 @@ jobs:
         docker export tgagor-centos-stream | docker import - tgagor/centos-stream
         docker tag tgagor/centos-stream tgagor/centos-stream:${{ github.sha }}
         docker tag tgagor/centos-stream tgagor/centos-stream:${GITHUB_REF##*/}
+        docker tag tgagor/centos-stream ghcr.io/tgagor/centos-stream:${{ github.sha }}
+        docker tag tgagor/centos-stream ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}
         docker push tgagor/centos-stream
         docker push tgagor/centos-stream:${GITHUB_REF##*/}
+        docker push ghcr.io/tgagor/centos-stream
+        docker push ghcr.io/tgagor/centos-stream:${GITHUB_REF##*/}
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master

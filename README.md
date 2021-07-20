@@ -3,7 +3,13 @@ CentOS 8 Stream Docker image
 
 [![build](https://github.com/tgagor/docker-centos-stream/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/tgagor/docker-centos-stream/actions/workflows/build.yml)
 
-We're all divided with recent decision on changing CentOS into rolling distro. As there are no official Docker images with Stream variant, I created them on my own, based on [official instruction](https://www.centos.org/centos-stream/). Now at least I can try it and decide on my own if it's stable enough for production workloads.
+## Update
+
+I finally found where the legit CentOS base image are now landing. I found it by accident when I was reading this article: https://blog.centos.org/2021/07/centos-community-newsletter-july-2021/
+
+I later checked on project's IRC channel and "one guy" confirmed, that project moved to quay.io when Docker introduced limits on registry service.
+
+It's not adding more confidence on my side to the CentOS project, when they're not even communicating such changes publicly, sick!
 
 You can fetch docker image from:
 * [tgagor/centos-stream](https://hub.docker.com/repository/docker/tgagor/centos-stream)
