@@ -18,8 +18,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Build, squash and push
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
@@ -82,6 +80,7 @@ jobs:
           docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream
           docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream:8
           docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream:stream8
+          docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream:${{ steps.tag_version.outputs.new_tag }}
 
           echo ${{ secrets.HUB_ACCESS }} | docker login -u $GITHUB_ACTOR --password-stdin
           docker push tgagor/centos-stream
