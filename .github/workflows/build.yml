@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - 'feature/*'
     tags:
       - '*.*.*'
   pull_request:
@@ -16,36 +17,57 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        tag:
+          - centos7
+          - centos8
+          - stream8
+          - stream9-development
     steps:
       - uses: actions/checkout@v2
       - name: Build, squash and push
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-          docker build --tag tgagor/centos-stream .
-          docker run --name tgagor-centos-stream tgagor/centos-stream true
-          docker export tgagor-centos-stream | docker import - tgagor/centos-stream
 
-          docker tag tgagor/centos-stream ghcr.io/tgagor/centos-stream
-          docker tag tgagor/centos-stream ghcr.io/tgagor/centos-stream:${{ github.sha }}
+          # build
+          docker build \
+            --build-arg TAG=${{ matrix.tag }} \
+            --tag tgagor/centos:${{ matrix.tag }} ${{ matrix.tag }}/
 
-          docker push ghcr.io/tgagor/centos-stream
-          docker push ghcr.io/tgagor/centos-stream:${{ github.sha }}
+          # squash
+          docker run --name tgagor-${{ matrix.tag }} tgagor/centos:${{ matrix.tag }} true
+          docker export tgagor-${{ matrix.tag }} | docker import - tgagor/centos:${{ matrix.tag }}
+
+          # tag
+          docker tag tgagor/centos:${{ matrix.tag }} ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
+
+          # push
+          docker push ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
 
   security-scan:
     runs-on: ubuntu-20.04
     needs:
       - build
+    strategy:
+      matrix:
+        tag:
+          - centos7
+          - centos8
+          - stream8
+          - stream9-development
     steps:
       - uses: actions/checkout@v2
       - name: Fetch image
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-          docker pull ghcr.io/tgagor/centos-stream:${{ github.sha }}
+
+          docker pull ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ghcr.io/tgagor/centos-stream:${{ github.sha }}
+          image-ref: ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
           format: template
           template: '@/contrib/sarif.tpl'
           # don't fail
@@ -71,22 +93,53 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch image
+      - name: Fetch and tag images
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
-          docker pull ghcr.io/tgagor/centos-stream:${{ github.sha }}
+          docker pull ghcr.io/tgagor/centos:centos7-${{ github.sha }}
+          docker pull ghcr.io/tgagor/centos:centos8-${{ github.sha }}
+          docker pull ghcr.io/tgagor/centos:stream8-${{ github.sha }}
+          docker pull ghcr.io/tgagor/centos:stream9-development-${{ github.sha }}
 
-          docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream
-          docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream:8
-          docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream:stream8
-          docker tag ghcr.io/tgagor/centos-stream:${{ github.sha }} tgagor/centos-stream:${{ steps.tag_version.outputs.new_tag }}
+          docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:centos7
+          docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:centos7-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:7
 
+          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:centos8
+          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:centos8-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:8
+          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:latest
+
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream8
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream8-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream
+
+          docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:stream9
+          docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:stream9-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+
+      - name: Push images
+        if: github.ref == 'refs/heads/master'
+        run: |
           echo ${{ secrets.HUB_ACCESS }} | docker login -u $GITHUB_ACTOR --password-stdin
-          docker push tgagor/centos-stream
-          docker push tgagor/centos-stream:8
-          docker push tgagor/centos-stream:stream8
-          docker push tgagor/centos-stream:${{ steps.tag_version.outputs.new_tag }}
+
+          docker push tgagor/centos:centos7-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker push tgagor/centos:centos7
+          docker push tgagor/centos:7
+
+          docker push tgagor/centos:centos8-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker push tgagor/centos:centos8
+          docker push tgagor/centos:8
+          docker push tgagor/centos:${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker push tgagor/centos:latest
+
+          docker push tgagor/centos:stream8-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker push tgagor/centos:stream8
+          docker push tgagor/centos:stream
+
+          docker push tgagor/centos:stream9-${ ${{ steps.tag_version.outputs.new_tag }}#v }
+          docker push tgagor/centos:stream9
 
       - name: Create normal GitHub release
         if: github.ref == 'refs/heads/master' && github.event_name != 'schedule'
