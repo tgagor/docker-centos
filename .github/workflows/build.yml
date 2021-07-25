@@ -51,7 +51,7 @@ jobs:
           # squash
           docker run --name tgagor-${{ matrix.tag }} tgagor/centos:${{ matrix.tag }} true
           docker export tgagor-${{ matrix.tag }} | docker import \
-            --change "LABEL maintainer=TiMoR <https://timor.site>" \
+            --change 'LABEL maintainer="TiMoR <https://timor.site>"' \
             --change "LABEL org.opencontainers.image.version=$DOCKER_TAG" \
             --change "LABEL org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
             --change "LABEL org.opencontainers.image.revision=$GITHUB_SHA" \
