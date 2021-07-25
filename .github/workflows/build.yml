@@ -96,6 +96,7 @@ jobs:
           # don't fail
           exit-code: 0
           output: trivy-results.sarif
+          severity: CRITICAL,HIGH,MEDIUM
 
       - name: Upload Trivy scan results to GitHub Security tab
         if: github.ref == 'refs/heads/master'
