@@ -1,6 +1,6 @@
 ARG TAG=centos7
 FROM quay.io/centos/centos:$TAG
-MAINTAINER tgagor, https://github.com/tgagor
+MAINTAINER TiMoR <https://timor.site>
 
 # upgrade packages
 RUN yum upgrade -y && \
