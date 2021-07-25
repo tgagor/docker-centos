@@ -127,6 +127,12 @@ jobs:
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream8-${DOCKER_TAG}
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream
 
+          # backward compatible
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:8
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:stream8
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:${DOCKER_TAG}
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:latest
+
           docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:stream9
           docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:stream9-${DOCKER_TAG}
 
@@ -148,6 +154,12 @@ jobs:
           docker push tgagor/centos:stream8-${DOCKER_TAG}
           docker push tgagor/centos:stream8
           docker push tgagor/centos:stream
+
+          # backward compatible
+          docker push tgagor/centos-stream:8
+          docker push tgagor/centos-stream:stream8
+          docker push tgagor/centos-stream:${DOCKER_TAG}
+          docker push tgagor/centos-stream:latest
 
           docker push tgagor/centos:stream9-${DOCKER_TAG}
           docker push tgagor/centos:stream9
