@@ -26,6 +26,18 @@ jobs:
           - stream9-development
     steps:
       - uses: actions/checkout@v2
+
+      - name: Guess next version
+        id: guessed_tag_version
+        uses: mathieudutour/github-tag-action@v5.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+      - name: Extract version from tag
+        env:
+          VERSION_TAG: ${{ steps.guessed_tag_version.outputs.new_tag }}
+        run: echo "DOCKER_TAG=${VERSION_TAG#v}" >> $GITHUB_ENV
+
       - name: Build, squash and push
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
@@ -33,6 +45,12 @@ jobs:
           # build
           docker build \
             --build-arg TAG=${{ matrix.tag }} \
+            --label maintainer="https://timor.site" \
+            --label org.opencontainers.image.version=$DOCKER_TAG \
+            --label org.opencontainers.image.source="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+            --label org.opencontainers.image.revision=$GITHUB_SHA \
+            --label org.opencontainers.image.branch=$GITHUB_REF \
+            --label org.opencontainers.image.created=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
             --tag tgagor/centos:${{ matrix.tag }} ${{ matrix.tag }}/
 
           # squash
