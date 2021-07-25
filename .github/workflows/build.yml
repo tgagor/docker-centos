@@ -33,11 +33,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
-          append_to_pre_release_tag: false
+          append_to_pre_release_tag:
       - name: Extract version from tag
         env:
           VERSION_TAG: ${{ steps.guessed_tag_version.outputs.new_tag }}
-        run: echo "DOCKER_TAG=${VERSION_TAG#v}" >> $GITHUB_ENV
+        run: echo "DOCKER_TAG=$(echo $VERSION_TAG | sed -e "s/^v//" -e "s/-.*$//")" >> $GITHUB_ENV
 
       - name: Build, squash and push
         run: |
