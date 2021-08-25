@@ -135,7 +135,7 @@ jobs:
           docker pull ghcr.io/tgagor/centos:centos7-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:centos8-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:stream8-${{ github.sha }}
-          docker pull ghcr.io/tgagor/centos:stream9-development-${{ github.sha }}
+          # docker pull ghcr.io/tgagor/centos:stream9-development-${{ github.sha }}
 
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:centos7
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-centos7
