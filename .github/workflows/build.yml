@@ -23,7 +23,7 @@ jobs:
           - centos7
           - centos8
           - stream8
-          - stream9-development
+          # - stream9-development
     steps:
       - uses: actions/checkout@v2
 
@@ -78,7 +78,7 @@ jobs:
           - centos7
           - centos8
           - stream8
-          - stream9-development
+          # - stream9-development
     steps:
       - uses: actions/checkout@v2
       - name: Fetch image
@@ -157,8 +157,8 @@ jobs:
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:${DOCKER_TAG}
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:latest
 
-          docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:stream9
-          docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream9
+          # docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:stream9
+          # docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream9
 
       - name: Push images
         if: github.ref == 'refs/heads/master'
@@ -185,8 +185,8 @@ jobs:
           docker push tgagor/centos-stream:${DOCKER_TAG}
           docker push tgagor/centos-stream:latest
 
-          docker push tgagor/centos:${DOCKER_TAG}-stream9
-          docker push tgagor/centos:stream9
+          # docker push tgagor/centos:${DOCKER_TAG}-stream9
+          # docker push tgagor/centos:stream9
 
       - name: Create normal GitHub release
         if: github.ref == 'refs/heads/master' && github.event_name != 'schedule'
