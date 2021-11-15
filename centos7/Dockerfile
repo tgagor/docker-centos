@@ -8,3 +8,5 @@ RUN yum upgrade -y && \
     rm -rf /tmp/* && \
     rm -rf /var/cache/yum && \
     find /var/log -type f -name '*.log' -delete
+    
+CMD ["/bin/bash"]
