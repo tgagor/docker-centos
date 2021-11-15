@@ -9,3 +9,5 @@ RUN dnf upgrade --setopt=install_weak_deps=False -y && \
     rm -rf /var/cache/yum && \
     rm -rf /var/cache/dnf && \
     find /var/log -type f -name '*.log' -delete
+
+CMD ["/bin/bash"]
