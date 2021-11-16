@@ -23,7 +23,6 @@ jobs:
           - centos7
           - centos8
           - stream8
-          - stream9-development
           - stream9
     steps:
       - uses: actions/checkout@v2
@@ -80,7 +79,6 @@ jobs:
           - centos7
           - centos8
           - stream8
-          - stream9-development
           - stream9
     steps:
       - uses: actions/checkout@v2
@@ -138,7 +136,7 @@ jobs:
           docker pull ghcr.io/tgagor/centos:centos7-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:centos8-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:stream8-${{ github.sha }}
-          docker pull ghcr.io/tgagor/centos:stream9-development-${{ github.sha }}
+          docker pull ghcr.io/tgagor/centos:stream9-${{ github.sha }}
 
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:centos7
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-centos7
@@ -160,8 +158,8 @@ jobs:
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:${DOCKER_TAG}
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:latest
 
-          docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:stream9
-          docker tag ghcr.io/tgagor/centos:stream9-development-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream9
+          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:stream9
+          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream9
 
       - name: Push images
         if: github.ref == 'refs/heads/master'
