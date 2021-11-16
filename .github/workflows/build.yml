@@ -24,6 +24,7 @@ jobs:
           - centos8
           - stream8
           - stream9-development
+          - stream9
     steps:
       - uses: actions/checkout@v2
 
@@ -80,6 +81,7 @@ jobs:
           - centos8
           - stream8
           - stream9-development
+          - stream9
     steps:
       - uses: actions/checkout@v2
       - name: Fetch image
