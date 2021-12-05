@@ -1,6 +1,6 @@
 ARG TAG=centos7
 FROM quay.io/centos/centos:$TAG
-MAINTAINER "Tomasz Gągor <https://timor.site>"
+MAINTAINER Tomasz Gągor <https://timor.site>
 
 # upgrade packages
 RUN yum upgrade -y && \
