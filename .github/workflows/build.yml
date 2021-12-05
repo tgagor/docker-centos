@@ -145,12 +145,9 @@ jobs:
           docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:centos8
           docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-centos8
           docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:8
-          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:${DOCKER_TAG}
-          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:latest
 
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream8
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream8
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream
 
           # backward compatible
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:8
@@ -159,7 +156,11 @@ jobs:
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:latest
 
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:stream9
+          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:9
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream9
+          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:stream
+          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:${DOCKER_TAG}
+          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:latest
 
       - name: Push images
         if: github.ref == 'refs/heads/master'
@@ -173,12 +174,9 @@ jobs:
           docker push tgagor/centos:${DOCKER_TAG}-centos8
           docker push tgagor/centos:centos8
           docker push tgagor/centos:8
-          docker push tgagor/centos:${DOCKER_TAG}
-          docker push tgagor/centos:latest
 
           docker push tgagor/centos:${DOCKER_TAG}-stream8
           docker push tgagor/centos:stream8
-          docker push tgagor/centos:stream
 
           # backward compatible
           docker push tgagor/centos-stream:8
@@ -188,6 +186,10 @@ jobs:
 
           docker push tgagor/centos:${DOCKER_TAG}-stream9
           docker push tgagor/centos:stream9
+          docker push tgagor/centos:9
+          docker push tgagor/centos:stream
+          docker push tgagor/centos:${DOCKER_TAG}
+          docker push tgagor/centos:latest
 
       - name: Create normal GitHub release
         if: github.ref == 'refs/heads/master' && github.event_name != 'schedule'
