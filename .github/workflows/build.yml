@@ -52,8 +52,8 @@ jobs:
           docker run --name tgagor-${{ matrix.tag }} tgagor/centos:${{ matrix.tag }} true
           docker export tgagor-${{ matrix.tag }} | docker import \
             --change 'CMD ["/bin/bash"]' \
-            --change 'LABEL maintainer="TiMoR <https://timor.site>"' \
-            --change 'LABEL org.opencontainers.image.authors=TiMoR' \
+            --change 'LABEL maintainer="Tomasz Gągor <https://timor.site>"' \
+            --change 'LABEL org.opencontainers.image.authors=Tomasz Gągor' \
             --change 'LABEL org.opencontainers.image.licenses=GPL-2.0' \
             --change "LABEL org.opencontainers.image.version=$DOCKER_TAG" \
             --change "LABEL org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
