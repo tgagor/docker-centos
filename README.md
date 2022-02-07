@@ -13,13 +13,12 @@ Those images are just standard CentOS base images, but:
 
 ## Supported tags and respective Dockerfile links
 
-* [latest, stream9, 9, 2.0.6-stream9, 2.0.6](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
-* [centos8, 8, 2.0.6-centos8](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
-* [stream, stream8, 2.0.6-stream8](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
-* [centos7, 7, 2.0.6-centos7](https://github.com/tgagor/docker-centos/blob/master/centos7/Dockerfile)
+* [latest, stream9, 9, 3.0.1-stream9, 3.0.1](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
+* [centos8, 8, 3.0.1-centos8](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
+* [stream, stream8, 8, 3.0.1-stream8](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
+* [centos7, 7, 3.0.1-centos7](https://github.com/tgagor/docker-centos/blob/master/centos7/Dockerfile)
 
 Version numbers use [SemVer](https://semver.org) and they reflect changes done in this repo - they are NOT related to CentOS versioning. For example, each weekly build will rise version number on last place, meaning patch level update.
-
 
 ## Image sizes
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/7?label=centos%3A7%20size)
