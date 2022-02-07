@@ -22,7 +22,6 @@ jobs:
       matrix:
         tag:
           - centos7
-          - centos8
           - stream8
           - stream9
     steps:
@@ -78,7 +77,6 @@ jobs:
       matrix:
         tag:
           - centos7
-          - centos8
           - stream8
           - stream9
     steps:
@@ -135,7 +133,6 @@ jobs:
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           docker pull ghcr.io/tgagor/centos:centos7-${{ github.sha }}
-          docker pull ghcr.io/tgagor/centos:centos8-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:stream8-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:stream9-${{ github.sha }}
 
@@ -143,11 +140,8 @@ jobs:
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-centos7
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:7
 
-          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:centos8
-          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-centos8
-          docker tag ghcr.io/tgagor/centos:centos8-${{ github.sha }} tgagor/centos:8
-
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream8
+          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:8
           docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream8
 
           # backward compatible
@@ -172,12 +166,9 @@ jobs:
           docker push tgagor/centos:centos7
           docker push tgagor/centos:7
 
-          docker push tgagor/centos:${DOCKER_TAG}-centos8
-          docker push tgagor/centos:centos8
-          docker push tgagor/centos:8
-
           docker push tgagor/centos:${DOCKER_TAG}-stream8
           docker push tgagor/centos:stream8
+          docker push tgagor/centos:8
 
           # backward compatible
           docker push tgagor/centos-stream:8
