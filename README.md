@@ -14,7 +14,6 @@ Those images are just standard CentOS base images, but:
 ## Supported tags and respective Dockerfile links
 
 * [latest, stream9, 9, 3.0.1-stream9, 3.0.1](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
-* [centos8, 8, 3.0.1-centos8](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
 * [stream, stream8, 8, 3.0.1-stream8](https://github.com/tgagor/docker-centos/blob/master/centos8/Dockerfile)
 * [centos7, 7, 3.0.1-centos7](https://github.com/tgagor/docker-centos/blob/master/centos7/Dockerfile)
 
