@@ -2,6 +2,8 @@ name: build
 
 on:
   push:
+    paths-ignore:
+      - 'README.md'
     branches:
       - master
       - 'feature/*'
@@ -182,6 +184,24 @@ jobs:
           docker push tgagor/centos:stream
           docker push tgagor/centos:${DOCKER_TAG}
           docker push tgagor/centos:latest
+
+      - name: Update README
+        if: github.ref == 'refs/heads/master' && !contains(github.event.commits[0].message, 'auto-update README')
+        run: |
+          curl -fsSLo /usr/local/bin/tpl https://github.com/schneidexe/tpl/releases/download/v0.6.1/tpl-linux-amd64
+          chmod +x /usr/local/bin/tpl
+
+          export DOCKER_TAG=${DOCKER_TAG}
+
+          tpl -t README-TEMPLATE.md | tee README.md
+
+          if [[ "$(git status --porcelain)" != "" ]]; then
+            git config user.name "GitHub Action"
+            git config user.email "action@github.com"
+            git add .
+            git commit -m "docs(readme): auto-update README.md"
+            git push
+          fi
 
       - name: Create normal GitHub release
         if: github.ref == 'refs/heads/master' && github.event_name != 'schedule'
