@@ -27,7 +27,7 @@ jobs:
           - stream8
           - stream9
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Guess next version
         id: guessed_tag_version
@@ -82,7 +82,7 @@ jobs:
           - stream8
           - stream9
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Fetch image
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
@@ -112,7 +112,7 @@ jobs:
       - build
       - security-scan
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Bump version and push tag
         if: github.ref == 'refs/heads/master'
         id: tag_version
