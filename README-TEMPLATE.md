@@ -38,4 +38,4 @@ You can fetch docker image from:
 
 ## More info
 
-More info: https://timor.site/2021/07/official-centos-8-stream-docker-image-finally-available/
+https://timor.site/2021/07/official-centos-8-stream-docker-image-finally-available/
