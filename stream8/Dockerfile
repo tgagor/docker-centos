@@ -1,6 +1,5 @@
 ARG TAG=stream
 FROM quay.io/centos/centos:$TAG
-MAINTAINER Tomasz Gągor <https://timor.site>
 
 # upgrade packages
 RUN dnf upgrade --setopt=install_weak_deps=False -y && \
