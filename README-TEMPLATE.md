@@ -14,6 +14,7 @@ Those images are just standard CentOS base images, but:
 ## Supported tags and respective Dockerfile links
 
 * [latest, stream, stream9, 9, {{ .DOCKER_TAG }}-stream9, {{ .DOCKER_TAG }}](https://github.com/tgagor/docker-centos/blob/master/stream9/Dockerfile)
+* [stream9-minimal, {{ .DOCKER_TAG }}-stream9-minimal](https://github.com/tgagor/docker-centos/blob/master/stream9-minimal/Dockerfile)
 * [stream8, 8, {{ .DOCKER_TAG }}-stream8](https://github.com/tgagor/docker-centos/blob/master/stream8/Dockerfile)
 * [centos7, 7, {{ .DOCKER_TAG }}-centos7](https://github.com/tgagor/docker-centos/blob/master/centos7/Dockerfile)
 
@@ -24,6 +25,7 @@ Version numbers use [SemVer](https://semver.org) and they reflect changes done i
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/8?label=centos%3A8%20size)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream8?label=centos%3Astream8%20size)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9%20size)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9-minimal%20size)
 
 ## Updates
 
