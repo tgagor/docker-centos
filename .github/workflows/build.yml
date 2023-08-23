@@ -31,7 +31,7 @@ jobs:
 
       - name: Guess next version
         id: guessed_tag_version
-        uses: mathieudutour/github-tag-action@v5.3
+        uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
@@ -102,7 +102,7 @@ jobs:
 
       - name: Upload Trivy scan results to GitHub Security tab
         if: github.ref == 'refs/heads/master'
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: trivy-results.sarif
 
@@ -116,7 +116,7 @@ jobs:
       - name: Bump version and push tag
         if: github.ref == 'refs/heads/master'
         id: tag_version
-        uses: mathieudutour/github-tag-action@v5.3
+        uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -216,7 +216,7 @@ jobs:
       - name: Get current date
         if: github.event_name == 'schedule'
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       - name: Create a weekly GitHub release
         if: github.event_name == 'schedule'
         uses: actions/create-release@v1
