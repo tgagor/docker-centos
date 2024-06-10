@@ -19,19 +19,21 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         tag:
           - centos7
-          - stream8
           - stream9
+          - stream9-minimal
+          - stream10-development
+          - stream10-development-minimal
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Guess next version
         id: guessed_tag_version
-        uses: mathieudutour/github-tag-action@v6.1
+        uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
@@ -72,17 +74,19 @@ jobs:
           docker push ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
 
   security-scan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - build
     strategy:
       matrix:
         tag:
           - centos7
-          - stream8
           - stream9
+          - stream9-minimal
+          - stream10-development
+          - stream10-development-minimal
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Fetch image
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
@@ -107,16 +111,16 @@ jobs:
           sarif_file: trivy-results.sarif
 
   release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - build
       - security-scan
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Bump version and push tag
         if: github.ref == 'refs/heads/master'
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
+        uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -135,22 +139,12 @@ jobs:
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           docker pull ghcr.io/tgagor/centos:centos7-${{ github.sha }}
-          docker pull ghcr.io/tgagor/centos:stream8-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:stream9-${{ github.sha }}
+          docker pull ghcr.io/tgagor/centos:stream10-${{ github.sha }}
 
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:centos7
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-centos7
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:7
-
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:stream8
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:8
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream8
-
-          # backward compatible
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:8
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:stream8
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:${DOCKER_TAG}
-          docker tag ghcr.io/tgagor/centos:stream8-${{ github.sha }} tgagor/centos-stream:latest
 
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:stream9
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:9
@@ -158,6 +152,10 @@ jobs:
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:stream
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:${DOCKER_TAG}
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:latest
+
+          docker tag ghcr.io/tgagor/centos:stream10-${{ github.sha }} tgagor/centos:stream10
+          docker tag ghcr.io/tgagor/centos:stream10-${{ github.sha }} tgagor/centos:10
+          docker tag ghcr.io/tgagor/centos:stream10-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream10
 
       - name: Push images
         if: github.ref == 'refs/heads/master'
@@ -168,22 +166,16 @@ jobs:
           docker push tgagor/centos:centos7
           docker push tgagor/centos:7
 
-          docker push tgagor/centos:${DOCKER_TAG}-stream8
-          docker push tgagor/centos:stream8
-          docker push tgagor/centos:8
-
-          # backward compatible
-          docker push tgagor/centos-stream:8
-          docker push tgagor/centos-stream:stream8
-          docker push tgagor/centos-stream:${DOCKER_TAG}
-          docker push tgagor/centos-stream:latest
-
           docker push tgagor/centos:${DOCKER_TAG}-stream9
           docker push tgagor/centos:stream9
           docker push tgagor/centos:9
           docker push tgagor/centos:stream
           docker push tgagor/centos:${DOCKER_TAG}
           docker push tgagor/centos:latest
+
+          docker push tgagor/centos:${DOCKER_TAG}-stream10
+          docker push tgagor/centos:stream10
+          docker push tgagor/centos:10
 
       - name: Update README
         if: github.ref == 'refs/heads/master' && !contains(github.event.commits[0].message, 'auto-update README')
