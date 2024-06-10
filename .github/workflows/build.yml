@@ -25,9 +25,7 @@ jobs:
         tag:
           - centos7
           - stream9
-          - stream9-minimal
           - stream10-development
-          - stream10-development-minimal
     steps:
       - uses: actions/checkout@v4
 
@@ -82,9 +80,7 @@ jobs:
         tag:
           - centos7
           - stream9
-          - stream9-minimal
           - stream10-development
-          - stream10-development-minimal
     steps:
       - uses: actions/checkout@v4
       - name: Fetch image
@@ -140,7 +136,7 @@ jobs:
 
           docker pull ghcr.io/tgagor/centos:centos7-${{ github.sha }}
           docker pull ghcr.io/tgagor/centos:stream9-${{ github.sha }}
-          docker pull ghcr.io/tgagor/centos:stream10-${{ github.sha }}
+          docker pull ghcr.io/tgagor/centos:stream10-development-${{ github.sha }}
 
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:centos7
           docker tag ghcr.io/tgagor/centos:centos7-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-centos7
@@ -153,9 +149,11 @@ jobs:
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:${DOCKER_TAG}
           docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:latest
 
-          docker tag ghcr.io/tgagor/centos:stream10-${{ github.sha }} tgagor/centos:stream10
-          docker tag ghcr.io/tgagor/centos:stream10-${{ github.sha }} tgagor/centos:10
-          docker tag ghcr.io/tgagor/centos:stream10-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream10
+          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:stream10
+          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:stream10-development
+          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:10
+          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream10
+          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream10-development
 
       - name: Push images
         if: github.ref == 'refs/heads/master'
@@ -174,7 +172,9 @@ jobs:
           docker push tgagor/centos:latest
 
           docker push tgagor/centos:${DOCKER_TAG}-stream10
+          docker push tgagor/centos:${DOCKER_TAG}-stream10-development
           docker push tgagor/centos:stream10
+          docker push tgagor/centos:stream10-development
           docker push tgagor/centos:10
 
       - name: Update README
