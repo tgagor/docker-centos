@@ -13,17 +13,14 @@ Those images are just standard CentOS base images, but:
 
 ## Supported tags and respective Dockerfile links
 
-* [stream10, 10, 4.0.1-stream10, 4.0.1](https://github.com/tgagor/docker-centos/blob/master/stream10/Dockerfile)
-* [latest, stream, stream9, 9, 4.0.1-stream9, 4.0.1](https://github.com/tgagor/docker-centos/blob/master/stream9/Dockerfile)
+* [stream10, 10, 4.0.2-stream10, 4.0.2](https://github.com/tgagor/docker-centos/blob/master/stream10/Dockerfile)
+* [latest, stream, stream9, 9, 4.0.2-stream9, 4.0.2](https://github.com/tgagor/docker-centos/blob/master/stream9/Dockerfile)
 
 Version numbers use [SemVer](https://semver.org) and they reflect changes done in this repo - they are NOT related to CentOS versioning. For example, each weekly build will rise version number on last place, meaning patch level update.
 
 ## Image sizes
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/7?label=centos%3A7%20size)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/8?label=centos%3A8%20size)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream8?label=centos%3Astream8%20size)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9%20size)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream10?label=centos%3Astream9%20size)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream10?label=centos%3Astream10%20size)
 
 ## Updates
 
