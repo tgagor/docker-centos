@@ -3,23 +3,23 @@ name: build
 on:
   push:
     paths-ignore:
-      - 'README.md'
+      - "README.md"
     branches:
       - master
-      - 'feature/*'
-      - 'bugfix/*'
+      - "feature/*"
+      - "bugfix/*"
     tags:
-      - '*.*.*'
+      - "*.*.*"
   pull_request:
     branches:
       - master
   schedule:
     # weekly: at 04:13 on Monday
-    - cron: '13 4 * * 1'
+    - cron: "13 4 * * 1"
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         tag:
@@ -71,7 +71,7 @@ jobs:
           docker push ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
 
   security-scan:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
       - build
     strategy:
@@ -92,7 +92,7 @@ jobs:
         with:
           image-ref: ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
           format: template
-          template: '@/contrib/sarif.tpl'
+          template: "@/contrib/sarif.tpl"
           # don't fail
           exit-code: 0
           output: trivy-results.sarif
@@ -105,7 +105,7 @@ jobs:
           sarif_file: trivy-results.sarif
 
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
       - build
       - security-scan
