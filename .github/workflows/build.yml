@@ -19,98 +19,26 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        tag:
-          - stream9
-          - stream10-development
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Guess next version
-        id: guessed_tag_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          dry_run: true
-          append_to_pre_release_tag: pre
-      - name: Extract version from tag
-        env:
-          VERSION_TAG: ${{ steps.guessed_tag_version.outputs.new_tag }}
-        run: echo "DOCKER_TAG=$(echo $VERSION_TAG | sed -e "s/^v//" -e "s/-.*$//")" >> $GITHUB_ENV
+      - name: Setup Template Dockerfiles
+        run: |
+          curl -fLo /usr/local/bin/td https://github.com/tgagor/template-dockerfiles/releases/latest/download/td-linux-amd64
+          chmod +x /usr/local/bin/td
 
       - name: Build, squash and push
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
-          # build
-          docker build \
-            --build-arg TAG=${{ matrix.tag }} \
-            --tag tgagor/centos:${{ matrix.tag }} ${{ matrix.tag }}/
+          td --config build-ghcr.yaml \
+            --build \
+            --squash \
+            --push \
+            --tag ${{ github.sha }} \
+            --delete
 
-          # squash
-          docker run --name tgagor-${{ matrix.tag }} tgagor/centos:${{ matrix.tag }} true
-          docker export tgagor-${{ matrix.tag }} | docker import \
-            --change 'CMD ["/bin/bash"]' \
-            --change 'LABEL maintainer="Tomasz Gągor <https://timor.site>"' \
-            --change 'LABEL org.opencontainers.image.authors="Tomasz Gągor"' \
-            --change 'LABEL org.opencontainers.image.licenses=GPL-2.0' \
-            --change "LABEL org.opencontainers.image.version=$DOCKER_TAG" \
-            --change "LABEL org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
-            --change "LABEL org.opencontainers.image.url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
-            --change "LABEL org.opencontainers.image.revision=$GITHUB_SHA" \
-            --change "LABEL org.opencontainers.image.branch=${GITHUB_REF#refs/*/}" \
-            --change "LABEL org.opencontainers.image.created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-            - tgagor/centos:${{ matrix.tag }}
-
-          # tag
-          docker tag tgagor/centos:${{ matrix.tag }} ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
-
-          # push
-          docker push ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
-
-  security-scan:
-    runs-on: ubuntu-22.04
-    needs:
-      - build
-    strategy:
-      matrix:
-        tag:
-          - stream9
-          - stream10-development
-    steps:
-      - uses: actions/checkout@v4
-      - name: Fetch image
-        run: |
-          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-
-          docker pull ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
-          format: template
-          template: '@/contrib/sarif.tpl'
-          # don't fail
-          exit-code: 0
-          output: trivy-results.sarif
-          severity: CRITICAL,HIGH,MEDIUM
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        if: github.ref == 'refs/heads/master'
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: trivy-results.sarif
-
-  release:
-    runs-on: ubuntu-22.04
-    needs:
-      - build
-      - security-scan
-    steps:
-      - uses: actions/checkout@v4
       - name: Bump version and push tag
         if: github.ref == 'refs/heads/master'
         id: tag_version
@@ -128,43 +56,17 @@ jobs:
         if: github.ref != 'refs/heads/master'
         run: echo "DOCKER_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Fetch and tag images
-        run: |
-          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-
-          docker pull ghcr.io/tgagor/centos:stream9-${{ github.sha }}
-          docker pull ghcr.io/tgagor/centos:stream10-development-${{ github.sha }}
-
-          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:stream9
-          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:9
-          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream9
-          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:stream
-          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:${DOCKER_TAG}
-          docker tag ghcr.io/tgagor/centos:stream9-${{ github.sha }} tgagor/centos:latest
-
-          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:stream10
-          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:stream10-development
-          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:10
-          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream10
-          docker tag ghcr.io/tgagor/centos:stream10-development-${{ github.sha }} tgagor/centos:${DOCKER_TAG}-stream10-development
-
-      - name: Push images
+      - name: Rebuild for Docker Hub and Push
         if: github.ref == 'refs/heads/master'
         run: |
           echo ${{ secrets.HUB_ACCESS }} | docker login -u $GITHUB_ACTOR --password-stdin
 
-          docker push tgagor/centos:${DOCKER_TAG}-stream9
-          docker push tgagor/centos:stream9
-          docker push tgagor/centos:9
-          docker push tgagor/centos:stream
-          docker push tgagor/centos:${DOCKER_TAG}
-          docker push tgagor/centos:latest
-
-          docker push tgagor/centos:${DOCKER_TAG}-stream10
-          docker push tgagor/centos:${DOCKER_TAG}-stream10-development
-          docker push tgagor/centos:stream10
-          docker push tgagor/centos:stream10-development
-          docker push tgagor/centos:10
+          td --config build-hub.yaml \
+            --build \
+            --squash \
+            --push \
+            --tag ${{ github.sha }} \
+            --delete
 
       - name: Update README
         if: github.ref == 'refs/heads/master' && !contains(github.event.commits[0].message, 'auto-update README')
@@ -208,3 +110,39 @@ jobs:
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: |
             Weekly rebuild on ${{ steps.date.outputs.date }}
+
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    strategy:
+      matrix:
+        tag:
+          - stream9
+          - stream10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch image
+        run: |
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+
+          set -x
+          docker pull ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
+          format: template
+          template: '@/contrib/sarif.tpl'
+          # don't fail
+          exit-code: 0
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH,MEDIUM
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        if: github.ref == 'refs/heads/master'
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: trivy-results.sarif
