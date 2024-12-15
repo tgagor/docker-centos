@@ -40,10 +40,10 @@ jobs:
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           # fetch template-dockerfiles
-          curl -f -o ./td https://github.com/tgagor/template-dockerfiles/releases/latest/download/td-linux-amd64
-          chmod +x ./td
+          curl -sfl -o /usr/local/bin/td https://github.com/tgagor/template-dockerfiles/releases/download/v0.0.2/td-linux-amd64
+          chmod +x /usr/local/bin/td
 
-          ./td --config build.yaml --tag $DOCKER_TAG --push
+          td --config build.yaml --tag $DOCKER_TAG --push
 
   security-scan:
     runs-on: ubuntu-latest
