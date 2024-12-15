@@ -41,7 +41,7 @@ jobs:
 
           # fetch template-dockerfiles
           set -x
-          curl -sfl -o /usr/local/bin/td https://github.com/tgagor/template-dockerfiles/releases/download/v0.0.2/td-linux-amd64
+          curl -fLo /usr/local/bin/td https://github.com/tgagor/template-dockerfiles/releases/latest/download/td-linux-amd64
           chmod +x /usr/local/bin/td
 
           td --config build.yaml --tag $DOCKER_TAG --push
