@@ -26,7 +26,7 @@ images:
       - centos:{{ .centos | trimPrefix "stream" }}
       - centos:{{ .tag | splitList "-" | first }}-{{ .centos }}
       - centos:{{ .tag | splitList "-" | first }}
-      - centos:{{ .tag }}
+      - centos:{{ .centos }}-{{ .tag | splitList "-" | rest | first }}
       - centos:stream
       - centos:latest
     labels:
