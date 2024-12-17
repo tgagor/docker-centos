@@ -65,7 +65,7 @@ jobs:
             --build \
             --squash \
             --push \
-            --tag ${{ github.sha }} \
+            --tag ${{ steps.tag_version.outputs.new_tag }} \
             --delete
 
       - name: Update README
