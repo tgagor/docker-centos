@@ -44,7 +44,7 @@ jobs:
           curl -fLo /usr/local/bin/td https://github.com/tgagor/template-dockerfiles/releases/latest/download/td-linux-amd64
           chmod +x /usr/local/bin/td
 
-          td --config build.yaml --tag ${DOCKER_TAG}-${{ github.sha }} --push
+          td --config build.yaml --build --delete --squash --push --tag ${DOCKER_TAG}-${{ github.sha }}
 
   security-scan:
     runs-on: ubuntu-latest
