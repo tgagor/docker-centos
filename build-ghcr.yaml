@@ -12,7 +12,7 @@ labels:
     Those images are just standard CentOS base images, but:
 
     1. With all the package updates installed weekly.
-    2. Squashed to single layer for smaller size.
+    2. Squashed to single layer for a smaller size.
 
 images:
   centos:
@@ -22,12 +22,6 @@ images:
         - stream9
         - stream10
     tags:
-      - centos:{{ .centos }}
-      - centos:{{ .centos | trimPrefix "stream" }}
-      - centos:{{ .tag | splitList "-" | first }}-{{ .centos }}
-      - centos:{{ .tag | splitList "-" | first }}
-      - centos:{{ .centos }}-{{ .tag | splitList "-" | rest | first }}
-      - centos:stream
-      - centos:latest
+      - centos:{{ .centos }}-{{ .tag }}
     labels:
       org.opencontainers.image.base.name: quay.io/centos/centos:{{ .centos }}
