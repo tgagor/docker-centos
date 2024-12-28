@@ -1,4 +1,5 @@
 ---
+
 prefix: tgagor
 maintainer: Tomasz Gągor <https://gagor.pro>
 
@@ -15,7 +16,7 @@ labels:
 
 images:
   centos:
-    dockerfile: Dockerfile.tpl
+    dockerfile: Dockerfile
     variables:
       centos:
         - stream9
