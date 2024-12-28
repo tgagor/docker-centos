@@ -1,4 +1,5 @@
-FROM quay.io/centos/centos:{{ .centos }}
+ARG TAG=stream
+FROM quay.io/centos/centos:$TAG
 
 # upgrade packages
 RUN dnf upgrade --setopt=install_weak_deps=False -y && \

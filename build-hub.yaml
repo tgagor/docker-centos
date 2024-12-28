@@ -20,6 +20,8 @@ images:
       centos:
         - stream9
         - stream10
+    args:
+      TAG: "{{ .centos }}"
     tags:
       - centos:{{ .centos }}
       - centos:{{ .centos | trimPrefix "stream" }}

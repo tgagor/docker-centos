@@ -16,11 +16,13 @@ labels:
 
 images:
   centos:
-    dockerfile: Dockerfile.tpl
+    dockerfile: Dockerfile
     variables:
       centos:
         - stream9
         - stream10
+    args:
+      TAG: "{{ .centos }}"
     tags:
       - centos:{{ .centos }}-{{ .tag }}
     labels:
