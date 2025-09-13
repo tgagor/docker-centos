@@ -13,6 +13,7 @@ on:
   pull_request:
     branches:
       - master
+      - dependabot/*
   schedule:
     # weekly: at 04:13 on Monday
     - cron: '13 4 * * 1'
