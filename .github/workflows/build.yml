@@ -20,9 +20,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v4
 
@@ -32,8 +29,10 @@ jobs:
           chmod +x /usr/local/bin/td
 
       - name: Build, squash and push
+        env:
+          CR_PAT: ${{ secrets.CR_PAT }}
         run: |
-          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          echo $CR_PAT | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           td --config build-ghcr.yaml \
             --build \
@@ -127,8 +126,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Fetch image
+        env:
+          CR_PAT: ${{ secrets.CR_PAT }}
         run: |
-          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          echo $CR_PAT | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           set -x
           docker pull ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
