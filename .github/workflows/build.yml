@@ -13,7 +13,6 @@ on:
   pull_request:
     branches:
       - master
-      - dependabot/*
   schedule:
     # weekly: at 04:13 on Monday
     - cron: '13 4 * * 1'
@@ -29,11 +28,19 @@ jobs:
           curl -fLo /usr/local/bin/td https://github.com/tgagor/template-dockerfiles/releases/latest/download/td-linux-amd64
           chmod +x /usr/local/bin/td
 
-      - name: Build, squash and push
-        env:
-          CR_PAT: ${{ secrets.CR_PAT }}
+      - name: Build
+        if: github.event_name == 'pull_request'
         run: |
-          echo $CR_PAT | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          td --config build-ghcr.yaml \
+            --build \
+            --squash \
+            --tag ${{ github.sha }} \
+            --delete
+
+      - name: Build, squash and push
+        if: github.event_name != 'pull_request'
+        run: |
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           td --config build-ghcr.yaml \
             --build \
@@ -60,7 +67,7 @@ jobs:
         run: echo "DOCKER_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Rebuild for Docker Hub and Push
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         run: |
           echo ${{ secrets.HUB_ACCESS }} | docker login -u $GITHUB_ACTOR --password-stdin
 
@@ -128,10 +135,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Fetch image
-        env:
-          CR_PAT: ${{ secrets.CR_PAT }}
         run: |
-          echo $CR_PAT | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           set -x
           docker pull ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
@@ -166,9 +171,9 @@ jobs:
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - run: |
-          gh pr review --approve "$PR_URL"
-          gh pr merge --squash --auto "$PR_URL"
-        env:
+      - env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --squash --auto "$PR_URL"
