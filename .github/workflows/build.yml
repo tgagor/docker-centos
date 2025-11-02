@@ -19,6 +19,9 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -120,6 +123,8 @@ jobs:
             Weekly rebuild on ${{ steps.date.outputs.date }}
 
   security-scan:
+    permissions:
+      security-events: write
     runs-on: ubuntu-latest
     needs:
       - build
