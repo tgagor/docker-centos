@@ -3,19 +3,19 @@ name: build
 on:
   push:
     paths-ignore:
-      - 'README.md'
+      - README.md
     branches:
       - master
-      - 'feature/*'
-      - 'bugfix/*'
+      - "feature/*"
+      - "bugfix/*"
     tags:
-      - '*.*.*'
+      - "*.*.*"
   pull_request:
     branches:
       - master
   schedule:
     # weekly: at 04:13 on Monday
-    - cron: '13 4 * * 1'
+    - cron: "13 4 * * 1"
 
 jobs:
   build:
@@ -95,7 +95,7 @@ jobs:
           fi
 
       - name: Create normal GitHub release
-        if: github.ref == 'refs/heads/master' && github.event_name != 'schedule'
+        if: github.ref == 'refs/heads/master' && (github.event_name != 'schedule' || github.actor == 'dependabot[bot]')
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -105,11 +105,11 @@ jobs:
           body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: Get current date
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' && github.actor != 'dependabot[bot]'
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       - name: Create a weekly GitHub release
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' && github.actor != 'dependabot[bot]'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -118,7 +118,6 @@ jobs:
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: |
             Weekly rebuild on ${{ steps.date.outputs.date }}
-
 
   security-scan:
     runs-on: ubuntu-latest
@@ -144,7 +143,7 @@ jobs:
         with:
           image-ref: ghcr.io/tgagor/centos:${{ matrix.tag }}-${{ github.sha }}
           format: template
-          template: '@/contrib/sarif.tpl'
+          template: "@/contrib/sarif.tpl"
           # don't fail
           exit-code: 0
           output: trivy-results.sarif
