@@ -15,7 +15,7 @@ labels:
     2. Squashed to single layer for a smaller size.
 
 options:
-  - --cache-to=type=gha,mode=max
+  - --cache-to=type=gha,mode=max,compression=zstd,compression-level=22
   - --output
   - type=image,compression=zstd,compression-level=22
 
