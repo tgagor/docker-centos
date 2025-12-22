@@ -16,7 +16,6 @@ labels:
 
 options:
   - --cache-to=type=gha,mode=max,compression=zstd,compression-level=22
-  - --output=type=image,compression=zstd,compression-level=22
 
 platforms:
   - linux/amd64
