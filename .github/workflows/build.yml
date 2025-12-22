@@ -133,7 +133,7 @@ jobs:
       matrix:
         tag:
           - stream9
-          - stream10
+          # - stream10
     steps:
       - uses: actions/checkout@v6
       - name: Fetch image
