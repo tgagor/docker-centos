@@ -43,7 +43,6 @@ jobs:
         run: |
           td --config build-ghcr.yaml \
             --build \
-            --squash \
             --tag ${{ github.sha }} \
             --delete
 
@@ -54,7 +53,6 @@ jobs:
 
           td --config build-ghcr.yaml \
             --build \
-            --squash \
             --push \
             --tag ${{ github.sha }} \
             --delete
@@ -139,7 +137,6 @@ jobs:
 
           td --config build-hub.yaml \
             --build \
-            --squash \
             --push \
             --tag ${{ steps.tag_version.outputs.new_tag }} \
             --delete
