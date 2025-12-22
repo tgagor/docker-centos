@@ -14,6 +14,9 @@ labels:
     1. With all the package updates installed weekly.
     2. Squashed to single layer for a smaller size.
 
+options:
+  - --cache-from=type=gha
+
 images:
   centos:
     dockerfile: Dockerfile
@@ -21,6 +24,7 @@ images:
       centos:
         - stream9
         - stream10
+        # - stream10-minimal
     args:
       TAG: "{{ .centos }}"
     tags:

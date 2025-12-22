@@ -14,6 +14,9 @@ labels:
     1. With all the package updates installed weekly.
     2. Squashed to single layer for a smaller size.
 
+options:
+  - --cache-to=type=gha
+
 images:
   centos:
     dockerfile: Dockerfile
@@ -24,6 +27,6 @@ images:
     args:
       TAG: "{{ .centos }}"
     tags:
-      - centos:{{ .centos }}-{{ .tag }}
+      - centos:{{ .tag }}-{{ .centos }}
     labels:
       org.opencontainers.image.base.name: quay.io/centos/centos:{{ .centos }}
