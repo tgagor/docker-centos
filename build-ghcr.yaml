@@ -16,6 +16,8 @@ labels:
 
 options:
   - --cache-to=type=gha,mode=max,compression=zstd,compression-level=22
+  - --output=type=image,name={{ .registry }}/{{ .prefix }}/centos:{{ .tag }}-{{ .centos }},push=true,compression=zstd,compression-level=22,force-compression=true
+
 
 platforms:
   - linux/amd64

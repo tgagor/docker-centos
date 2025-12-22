@@ -16,7 +16,7 @@ labels:
 
 options:
   - --cache-from=type=gha
-  - --output=type=image,compression=zstd,compression-level=22
+  - --output=type=image,name={{ .prefix }}/centos:{{ .tag }}-{{ .centos }},push=true,compression=zstd,compression-level=22
 
 platforms:
   - linux/amd64
@@ -31,7 +31,6 @@ images:
       centos:
         - stream9
         - stream10
-        # - stream10-minimal
     args:
       TAG: "{{ .centos }}"
     tags:
