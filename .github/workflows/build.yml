@@ -149,7 +149,7 @@ jobs:
       #   run: echo "DOCKER_TAG=${VERSION_TAG#v}" >> $GITHUB_ENV
 
       - name: Rebuild for Docker Hub and Push
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        # if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           echo ${{ secrets.HUB_ACCESS }} | docker login -u $GITHUB_ACTOR --password-stdin
 
