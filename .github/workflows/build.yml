@@ -52,6 +52,7 @@ jobs:
             --engine buildx \
             --build \
             --tag ${{ github.sha }} \
+            --verbose \
             --delete
 
       - name: Build, squash and push
@@ -64,6 +65,7 @@ jobs:
             --build \
             --push \
             --tag ${{ github.sha }} \
+            --verbose \
             --delete
 
   security-scan:
@@ -155,6 +157,7 @@ jobs:
             --engine buildx \
             --build \
             --tag ${{ steps.tag_version.outputs.new_tag }} \
+            --verbose \
             --delete
 
       # - name: Update README
