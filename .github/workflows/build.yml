@@ -49,6 +49,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           td --config build-ghcr.yaml \
+            --engine buildx \
             --build \
             --tag ${{ github.sha }} \
             --delete
@@ -59,6 +60,7 @@ jobs:
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
           td --config build-ghcr.yaml \
+            --engine buildx \
             --build \
             --push \
             --tag ${{ github.sha }} \
@@ -150,6 +152,7 @@ jobs:
           echo ${{ secrets.HUB_ACCESS }} | docker login -u $GITHUB_ACTOR --password-stdin
 
           td --config build-hub.yaml \
+            --engine buildx \
             --build \
             --push \
             --tag ${{ steps.tag_version.outputs.new_tag }} \
