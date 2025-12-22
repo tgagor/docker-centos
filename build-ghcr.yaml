@@ -15,7 +15,15 @@ labels:
     2. Squashed to single layer for a smaller size.
 
 options:
-  - --cache-to=type=gha
+  - --cache-to=type=gha,mode=max
+  - --output
+  - type=image,compression=zstd,compression-level=22
+
+platforms:
+  - linux/amd64
+  - linux/arm64
+  - linux/ppc64le
+  - linux/s390x
 
 images:
   centos:

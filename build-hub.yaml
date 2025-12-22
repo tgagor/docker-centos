@@ -16,6 +16,14 @@ labels:
 
 options:
   - --cache-from=type=gha
+  - --output
+  - type=image,compression=zstd,compression-level=22
+
+platforms:
+  - linux/amd64
+  - linux/arm64
+  - linux/ppc64le
+  - linux/s390x
 
 images:
   centos:
