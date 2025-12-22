@@ -38,7 +38,7 @@ jobs:
       - name: Setup Template Dockerfiles
         uses: tgagor/template-dockerfiles@v0.15.4
 
-      - name: Build
+      - name: Build on pull request
         if: github.event_name == 'pull_request'
         run: |
           td --config build-ghcr.yaml \
