@@ -19,8 +19,13 @@ Those images are just standard CentOS base images, but:
 Version numbers use [SemVer](https://semver.org) and they reflect changes done in this repo - they are NOT related to CentOS versioning. For example, each weekly build will rise version number on last place, meaning patch level update.
 
 ## Image sizes
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9%20size)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream10?label=centos%3Astream10%20size)
+
+| Architecture | CentOS 9                                                                                                                              | CentOS 10                                                                                                                               |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| amd64        | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9%20size?arch=amd64)   | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream10?label=centos%3Astream10%20size?arch=amd64)   |
+| arm64        | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9%20size?arch=arm64)   | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream10?label=centos%3Astream10%20size?arch=arm64)   |
+| ppc64le      | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9%20size?arch=ppc64le) | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream10?label=centos%3Astream10%20size?arch=ppc64le) |
+| s390x        | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream9?label=centos%3Astream9%20size?arch=s390x)   | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/tgagor/centos/stream10?label=centos%3Astream10%20size?arch=s390x)   |
 
 ## Updates
 
