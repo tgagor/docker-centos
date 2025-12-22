@@ -5,14 +5,14 @@ on:
     paths-ignore:
       - README.md
     branches:
-      - master
+      - main
       - "feature/*"
       - "bugfix/*"
     tags:
       - "*.*.*"
   pull_request:
     branches:
-      - master
+      - main
   schedule:
     # weekly: at 04:13 on Monday
     - cron: "13 4 * * 1"
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-    if: github.ref == 'refs/heads/master' || github.event_name == 'schedule'
+    if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
     strategy:
       matrix:
         tag:
@@ -92,7 +92,7 @@ jobs:
           severity: CRITICAL,HIGH,MEDIUM
 
       - name: Upload Trivy scan results to GitHub Security tab
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-results.sarif
@@ -104,7 +104,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v6
 
@@ -127,13 +127,13 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract version from tag on master
+      - name: Extract version from tag on main
         env:
           VERSION_TAG: ${{ steps.tag_version.outputs.new_tag }}
         run: echo "DOCKER_TAG=${VERSION_TAG#v}" >> $GITHUB_ENV
 
       - name: Rebuild for Docker Hub and Push
-        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           echo ${{ secrets.HUB_ACCESS }} | docker login -u $GITHUB_ACTOR --password-stdin
 
