@@ -13,8 +13,8 @@ Those images are just standard CentOS base images, but:
 
 ## Supported tags and respective Dockerfile links
 
-* [stream10, 10, 4.5.6-stream10, 4.5.6](https://github.com/tgagor/docker-centos/blob/master/Dockerfile)
-* [latest, stream, stream9, 9, 4.5.6-stream9, 4.5.6](https://github.com/tgagor/docker-centos/blob/master/Dockerfile)
+* [stream10, 10, 4.5.7-stream10, 4.5.7](https://github.com/tgagor/docker-centos/blob/master/Dockerfile)
+* [latest, stream, stream9, 9, 4.5.7-stream9, 4.5.7](https://github.com/tgagor/docker-centos/blob/master/Dockerfile)
 
 Version numbers use [SemVer](https://semver.org) and they reflect changes done in this repo - they are NOT related to CentOS versioning. For example, each weekly build will rise version number on last place, meaning patch level update.
 
