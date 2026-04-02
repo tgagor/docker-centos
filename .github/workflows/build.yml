@@ -17,6 +17,10 @@ on:
     # weekly: at 04:13 on Monday
     - cron: "13 4 * * 1"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     permissions:
