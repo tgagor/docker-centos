@@ -162,12 +162,13 @@ jobs:
             --tag ${{ steps.tag_version.outputs.new_tag }} \
             --delete
 
+      - name: Install TPL
+        if: ${{ !contains(github.event.commits[0].message, 'auto-update README') }}
+        uses: zooplus/tpl@v0.13.5
+
       - name: Update README
         if: ${{ !contains(github.event.commits[0].message, 'auto-update README') }}
         run: |
-          curl -fsSLo /usr/local/bin/tpl https://github.com/schneidexe/tpl/releases/download/v0.6.1/tpl-linux-amd64
-          chmod +x /usr/local/bin/tpl
-
           export DOCKER_TAG=${DOCKER_TAG}
 
           tpl -t README-TEMPLATE.md | tee README.md
