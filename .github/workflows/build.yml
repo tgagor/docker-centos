@@ -164,7 +164,7 @@ jobs:
 
       - name: Install TPL
         if: ${{ !contains(github.event.commits[0].message, 'auto-update README') }}
-        uses: zooplus/tpl@v0.13.5
+        uses: zooplus/tpl@v0.13.6
 
       - name: Update README
         if: ${{ !contains(github.event.commits[0].message, 'auto-update README') }}
