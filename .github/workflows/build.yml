@@ -27,7 +27,7 @@ jobs:
       packages: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Docker
         uses: docker/setup-docker-action@v5
@@ -83,7 +83,7 @@ jobs:
           - stream9
           # - stream10  # temporarily disabled due to trivy issues
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Fetch image
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
@@ -117,7 +117,7 @@ jobs:
       - build
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Docker
         uses: docker/setup-docker-action@v5
